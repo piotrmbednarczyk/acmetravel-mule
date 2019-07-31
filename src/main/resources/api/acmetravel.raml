@@ -1,0 +1,143 @@
+#%RAML 1.0
+securitySchemes:
+  BasicAuth:
+    type: Basic Authentication
+mediaType:
+  - application/json
+types:
+  Flight:
+    properties:
+      flightCode:
+        example: Example
+        type: string
+      airlineName:
+        example: Example
+        type: string
+      departureAirport:
+        example: Example
+        type: string
+      destinationAirport:
+        example: Example
+        type: string
+      departureDate:
+        example: 2019-07-20T19:21:10.819Z
+        type: datetime
+        format: rfc3339
+      aircraftType:
+        example: Example
+        type: string
+      seatAvailability:
+        example: 1
+        type: number
+        format: int
+      price:
+        example: 123.45
+        type: number
+        format: double
+  Destination:
+    properties:
+      country:
+        example: Example
+        type: string
+      city:
+        example: Example
+        type: string
+      airportName:
+        example: Example
+        type: string
+title: Acme Travel API
+version: v1
+protocols:
+  - HTTP
+/flights:
+  post:
+    displayName: New flight
+    body:
+      properties:
+        airlineId:
+          example: 1
+          type: number
+          format: int
+        sourceAirportId:
+          example: 1
+          type: number
+          format: int
+        destinationAirportId:
+          example: 1
+          type: number
+          format: int
+        newProperty:
+          example: Example
+          type: string
+        flightCode:
+          example: Example
+          type: string
+        departureDate:
+          example: 2019-07-20T19:47:18.822Z
+          type: datetime
+          format: rfc3339
+        aircraftType:
+          example: Example
+          type: string
+        seatAvailability:
+          example: 1
+          type: number
+          format: int
+        price:
+          example: 123.45
+          type: number
+          format: double
+    responses:
+      "201":
+        body:
+          type: Flight
+  patch:
+    displayName: Change price
+    body:
+      properties:
+        price:
+          example: 123.45
+          type: number
+          format: double
+    responses:
+      "202": {}
+/flights/{date}:
+  get:
+    description: Return a list of available flights on a given date
+    responses:
+      "200":
+        body:
+          application/json:
+              type: Flight[]
+    securedBy: []
+  uriParameters:
+    date:
+      example: 2019-07-20
+      type: date-only
+/destinations/{airline}/{page}:
+  get:
+    description: Paginated list of destinations (country, city, airport name) for a given airline  (10 results per page)
+    responses:
+      "200":
+        body:
+            application/json:
+                type: Destination[]
+    securedBy: []
+  uriParameters:
+    airline:
+      example: Example
+      type: string
+    page:
+      example: 1
+      type: number
+      format: int
+/flights/{flightCode}/bookings:
+  post:
+    displayName: Ticket purchase
+    responses:
+      "201": {}
+    securedBy: []
+  uriParameters:
+    flightCode:
+      example: Example
+      type: string
